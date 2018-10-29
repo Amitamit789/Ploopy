@@ -1,35 +1,59 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
+from rest_framework import status
 from . import models, serializers
 
-class ListAllImages(APIView):
+
+class Feed(APIView):
 
     def get(self, request, format=None):
 
-        all_images = models.Image.objects.all()
+        user = request.user
 
-        serializer = serializers.ImageSerializer(all_images, many=True)
+        following_users = user.following.all()
 
-        return Response(data=serializer.data)
+        image_list = []
+
+        for following_users in following_users:
+
+            user_images = following_users.images.all()[:2]
+
+            for image in user_images:
+                image_list.append(image)
+
+        sorted_list = sorted(image_list, key=lambda image: image.created_at, reverse=True)
+
+        serializer = serializers.ImageSerializer(sorted_list, many=True)
+
+        return Response(serializer.data)
 
 
-class ListAllComments(APIView):
+class LikeImage(APIView):
 
-    def get(self, request, format=None):
+    def get(self, request, image_id, format=None):
 
-        all_coments = models.Comment.objects.all()
+        user = request.user
 
-        serializer = serializers.CommentSerializer(all_coments, many=True)
+        try:
+            found_image = models.Image.objects.get(id=image_id)
+        except models.Image.DoesNotExist:
+            return Response(status=status.HTTP_404_NOT_FOUND)
 
-        return Response(data=serializer.data)
+        try:
+            preexisting_like = models.Like.objects.get(
+                creator=user,
+                image=found_image
+            )
+            preexisting_like.delete()
 
+            return Response(status=status.HTTP_204_NO_CONTENT)
 
-class ListAllLikes(APIView):
+        except models.Like.DoesNotExist:
+            new_like = models.Like.objects.create(
+                creator=user,
+                image=found_image
+            )
 
-    def get(self, request, format=None):
+            new_like.save()
 
-        all_likes = models.Like.objects.all()
-
-        serializer = serializers.LikeSerializer(all_likes, many=True)
-
-        return Response(data=serializer.data)
+            return Response(status=status.HTTP_201_CREATED)
