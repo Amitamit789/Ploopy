@@ -1,5 +1,6 @@
 from django.db import models
 from ploopy.users import models as user_models
+from taggit.managers import TaggableManager
 
 class TimeStampedModel(models.Model):
 
@@ -18,10 +19,15 @@ class Image(TimeStampedModel):
     location = models.CharField(max_length=140)
     caption = models.TextField()
     creator = models.ForeignKey(user_models.User, null=True, related_name='images', on_delete=models.CASCADE)
-
+    tags = TaggableManager()
+    
     @property
     def like_count(self):
         return self.likes.all().count()
+    
+    @property
+    def comment_count(self):
+        return self.comments.all().count()
 
     def __str__(self):
         return '{} - {}'.format(self.location, self.caption)

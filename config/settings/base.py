@@ -42,7 +42,7 @@ DATABASES = {
     # 'default': env.db('DATABASE_URL', default='postgres:///ploopy'),
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'ploopy',
+        'NAME': 'ploopy_prototype',
         'USER': 'dope',
         'PASSWORD': 'database',
         'HOST': '127.0.0.1',
@@ -75,11 +75,13 @@ THIRD_PARTY_APPS = [
     'allauth.account', # registration
     'allauth.socialaccount', # registration
     'rest_framework', # REST framework
+    'taggit', # Tags for the photos
 ]
 LOCAL_APPS = [
     'ploopy.users.apps.UsersAppConfig',
     # Your stuff: custom apps go here
     'ploopy.images.apps.ImagesConfig',
+    'ploopy.notifications.apps.NotificationsConfig', # notifications app
 ]
 # https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
@@ -244,3 +246,4 @@ SOCIALACCOUNT_ADAPTER = 'ploopy.users.adapters.SocialAccountAdapter'
 
 # Your stuff...
 # ------------------------------------------------------------------------------
+TAGGIT_CASE_INSENSITIVE = True
