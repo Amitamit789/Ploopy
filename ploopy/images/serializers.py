@@ -73,7 +73,7 @@ class ImageSerializer(TaggitSerializer, serializers.ModelSerializer):
 
 class InputImageSerializer(serializers.ModelSerializer):
     
-    file = serializers.FileField(required=False)
+    file = serializers.FileField()
     
     class Meta:
         model = models.Image
