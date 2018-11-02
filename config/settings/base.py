@@ -70,22 +70,25 @@ DJANGO_APPS = [
     # 'django.contrib.humanize', # Handy template tags
     'django.contrib.admin',
 ]
+LOCAL_APPS = [
+    'ploopy.users.apps.UsersAppConfig',
+    # Your stuff: custom apps go here
+    'ploopy.images.apps.ImagesConfig',
+    'ploopy.notifications.apps.NotificationsConfig', # notifications app
+]
 THIRD_PARTY_APPS = [
     'allauth', # registration
     'allauth.account', # registration
     'allauth.socialaccount', # registration
+    'allauth.socialaccount.providers.google',
+    'allauth.socialaccount.providers.facebook',
     'rest_framework', # REST framework
     'rest_framework.authtoken',
     'taggit', # Tags for the photos
     'taggit_serializer', # tag serializer
     'rest_auth', # rest auth
     'rest_auth.registration', # enable registration
-]
-LOCAL_APPS = [
-    'ploopy.users.apps.UsersAppConfig',
-    # Your stuff: custom apps go here
-    'ploopy.images.apps.ImagesConfig',
-    'ploopy.notifications.apps.NotificationsConfig', # notifications app
+    # 'django_extensions', # django_extensions
 ]
 # https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
